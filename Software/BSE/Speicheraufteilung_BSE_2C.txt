@@ -1,0 +1,275 @@
+Kürzel
+------
+	Merker
+	------
+	 BM	Binaermerker
+	 AM	Analogmerker
+
+	Trend
+	-----
+	 AS
+	 AU
+
+MAB     Modulaufrufblock
+SBM     Sonderbasismodul
+SM
+VAP
+KES     Karteneinschub
+KESTAT  Karteneinschubstatus
+KOM[x]  
+PIGI    
+ATN
+SCT
+BZZ
+BLAZ
+MFLO
+RADG
+DAT
+PIG
+PING
+SOMO    Sondermodule
+
+Speicheraufteilung BSE
+----------------------
+Ebene            Adr.-Bereich       Verwendung      Baugr.  Bemerkung                                          Steckplatz |Size
+--------------|------------------|--------------|---------|--------------------------------------------------|------------|-----
+Grundenebene    0x0000 - 0x0BFF     System ROM      ZRE     (CRC-System: 0x038e)                                G1:85       3072
+Grundenebene    0x0C00 - 0x0FFF     RAM             ZRE                                                           "         1024
+Grundenebene    0x1000 - 0x43FF     System ROM      1.PFS                                                       G1:61       13312
+Grundenebene    0x4400 - 0x4FFF     Objekt-ROM      1.PFS   (Generierdaten)                                       "         3072
+Ebene1 (0x01)   0x5000 - 0x8FFF     System ROM      2.PFS   (Verarbeitungsteile BM / SM )                       G1:53       
+Ebene2 (0x02)   0x5000 - 0x6FFF     System ROM      3.PFS                                                       G1:45
+Ebene2 (0x02)   0x7000 - 0x8FFF     Objekt ROM      3.PFS   (Verarbeitungsteile SBM bei BSEAP ab 0x8000 )         "
+Ebene3 (0x04)   0x5000 - 0x87FF     System ROM      4.PFS                                                       G1:41
+Ebene3 (0x04)   0x8800 - 0x8FFF     Objekt ROM      4.PFS   (Bedienmodule BSEAP)                                  "
+Ebene4 (0x08)   0x5000 - 0x8FFF     Objekt ROM      5.PFS   (Listen BSEAP)                                      G1:37
+Grundenebene    0x9000 - 0xCFFF     Objekt RAM      1.OPS   (Listenbereich)                                     G1:57
+Grundenebene    0xd000 - 0xFFFF     Objekt RAM      2.OPS   ()                                                  G1:49
+Ebene5 (0x10)   0x3000 - 0x33FF     Koppel RAM      1.ISI
+Ebene6 (0x20)   0x3000 - 0x33FF     Koppel RAM      2.ISI  
+Ebene7 (0x40)   0x3000 - 0x33FF     Koppel RAM      3.ISI  
+Ebene8 (0x80)   0x3000 - 0x33FF     Koppel RAM      4.ISI
+
+Wichitge Sprungziele
+--------------------
+0x2481 Systemrücksprung SBM
+                
+Aufbau Karteneinschub-Statustabelle (KESTAT)
+--------------------------------------------
+Adresse steht auf 0x482c / Laenge = 32 Byte
+
+                            Byte 1  -   KES-Status          PEA-Baugruppe   1
+                            Byte 2  -       "                   "           2
+                              |             |                   |           |
+                            Byte 26         "                   "           26
+                            Byte 27     frei (0x02)
+                            Byte 28     KES-Status          ZRE
+                            Byte 29         "               ZI1
+                            Byte 30         "               ZI2
+                            Byte 31         "               UEB
+                            Byte 32         "               KOMO
+
+Aufbau KES-Status (aus C18 Heft 5 Teil 6)
+-----------------
+Bit
+0   -   AUS
+1   -
+2   -
+3   -
+4   -
+5   -
+6   -
+7   -   INT
+
+Aufbau der Modulaufrufbloecke (MAB) in den Verarbeitungseinheiten
+----------------------------------------------------------------
+                            Byte 1      RST-Behfehl
+                            Byte 2      Modulnummer
+                            Byte 3      Fehlercode
+                            Byte 4,...  Adressen Signale,Parameter,Interne Merker
+                            Byte n,n+1  Adresse Folge-MAB
+                            
+    Restart-Befehle:    Basismodule, Sonderbasismodule      RST 0x20 (0xE7)
+                        Steuermodule                        RST 0x10 (0xD7)
+                        Markenmodule                        RST 0x30 (0xF7)
+                
+Wohin ?
+--------
+    Testzellen im RAM : 1.RAM-Karte (?) ab 0x93F1   0x01 , 0x02 ... 0x0a
+                        2.RAM-Karte (?) ab 0xFFF?   0x01 , 0x02 ... 0x0a
+                                                L Unklar ob 5 oder 6
+ROM-Listen BSE
+
+Listennummer    Adresse     Bytezahl und Bedeutung
+                0x41FE              Anzahl Steurmodule
+??              0x4200              Steuermodule (2byte) Adr.
+
+??              0x4360 - 0x43FF     BASISMODULE 2byte Adr.
+
+51              0x4400      SOMO    n*2 Byte Adressen ??? (Adr ?16ch / N.S.)
+                                    Adressen zu Sondermodulen
+
+49              0x4480      VERT    128* EST18/28 (0x0df / 0x0ef) Verteiler
+
+22              0x4580      KESAT   Karteneinschub Blockadressentabelle 
+                                    Byte 0      Anzahl der KES Bloecke
+                                    Byte 1,2    Adresse 1.KES Block
+                                        |
+                                    Byte n-1,n  Adresse letzte KES Block
+
+27              0x45ba      1.KES Block
+                                    Byte 0      PLA-Modulnummer
+                                    Byte 1      Baugruppen Adresse
+                                    Byte 2,3    Adresse Prozessabbild bzw. bei Analogeingabe Adresse Anpasskartentabelle
+                                    Byte 4,...  Initialisierungsdaten
+                                        |
+                            2.KES Block
+                                    Byte n,...
+                                        |
+                            letzter KES Block
+                                    Byte m,...
+                                        |
+                            1.Block Anpasskartentabelle
+                                    Byte 0,1    Adresse Prozessabbild
+                                    Byte 2      erste Kanaladresse (normal = 00 )
+                                    Byte 3      Kanalzahl der 1.Karte (04 oder 08 )
+                                    Byte 4      Kanalzahl der 2.Karte (04 oder 08)
+                                        |
+                                    Byte n      0x00 Endekennung
+                            2.Block Anpasskartentabelle 
+                                        |
+                                       usw.
+        
+50                          Adressbuch ( für Prozessabbild )              
+                0x47d0              2 Byte  Anfangsadresse (Binaere Merker (?) )    
+                                    2 Byte  Endadresse (Trendblock)
+                0x47d4              2 Byte  Adresse      \                      RGL-ADP
+                                    2 Byte  Anzahl Bytes /
+                0x47d8              2 Byte  Adresse      \                      SZ0
+                                    1 Byte  Blockanzahl  |
+                                    1 Byte  Byte je Block/
+                0x47dc              4 Byte  (siehe SZ0)                         SZ1
+                0x47e0              4 Byte  (siehe SZ0)                         SZ2
+                0x47e4              4 Byte  (siehe SZ0)                         SZ3
+                0x47e8              2 Byte  Anfangsadresse MAB-TABELLE          MABT
+                                    2 Byte  Anzahl Reservierter Bytes
+                0x47ec              2 Byte  Anfangsadresse KOM-Tabelle          KOMT
+                                    1 Byte  Anzahl Bloecke
+                                    1 Byte  Anzahl Bytes je Block
+                0x47f0              4 Byte  Analogeingabe (siehe KOMT)          ANA-E
+                0x47f4              4 Byte  Binaereingabe                       BIN-E
+                0x47f8              4 Byte  Multiplexeingabe                    MPX-E
+                0x47fc              4 Byte  Impulseingabe                       IMP-E
+                0x4800              4 Byte  GRW-ADU
+                                    4 Byte  Frei
+                0x4808              4 Byte  Analogausabe1K                      ANA-A1K
+                0x480C              4 Byte  Analogausabe5K                      ANA-A5K
+                0x4810              4 Byte  Binaerausgabe                       BIN-A
+                0x4814              4 Byte  Impulsausgabe                       IMP-A
+                0x4818              4 Byte  Zifferanzeige                       Z-ANZ
+                0x4820              4 Byte  Binaere-Merker                      MRK-BIN
+                0x4824              4 Byte  Analoge Merker                      MRK-ANA
+                0x4828              2 Byte  Adresse KES-Adresstabelle           KESAT
+                                    1 Byte  Laenge KESAT
+                                    1 Byte  0x00
+                0x482C              2 Byte  Adresse Kartenstatus                KESTAT
+                                    1 Byte  Anzahle der Blöcke
+                                    1 Byte  Bytes im Block
+                0x4830              4 Byte  Zeitangaben                         ZSAT
+                0x4834              4 Byte  Trendblock (siehe KESTAT)           TRND-BL
+                0x4838              4 Byte  Trend-Speicher                      TRND-SP
+                0x483c              2 Byte  Adresse 1.KES-Block
+                                    2 Byte  Laenge KES-Blocktabelle
+                0x4840              2 Byte  Adresse SBM-Verarbeitungsteile (7000)
+                                    2 Byte  Laenge (kein SBM -> 00 00)
+                0x4844              2 Byte  Adresse Org.-Teile SBM (4?00)
+                                    2 Byte  Laenge
+                0x4848              2 Byte  Adresse Projektdatum
+                                    2 Byte  Lange (02 00)
+                0x484c              2 Byte  Adresse Pruefsummentabelle
+                                    2 Byte  Laenge
+                0x4850              4 Byte  Adresse / Laenge Bedienmodule BSEAS
+                0x4854              2 Byte  Adresse Anwenderbedienmodule im RAM
+                                    2 Byte  Laenge
+                0x4858              4 Byte  Adresse / Laenge Bedienmodule BSEAS
+                0x485c              2 Byte  Adresse KOM Adresstabelle
+                                    2 Byte  Laenge der Tabelle
+                0x4860              n * 4 Byte für Bedienmodule BSEAS
+
+42                          Datenblock der BSE
+                0x4880              1 Byte  max. BM-Nummer
+                0x4881              2 Byte  Tastfaktoren
+                0x4883              2 Byte  Rechenzeitfonds
+                0x4885              1 Byte  * 10 ms = Grundtakt
+                0x4886              1 Byte  * 20 ms = Fonds DUE
+                0x4887              2 Byte  0x00 0x00
+                0x4889              2 Byte  0xa0 0x0f Ein(?s oder g?) ADU
+                0x488b              4 Byte  0xff 0xff 0xff 0xff
+                0x488f              1 Byte  Adresse AAE (FE)
+                0x4890              1 Byte  1.ZI-MOD
+                0x4891              1 Byte  2.ZI-MOD 
+                0x4892              3 Byte  ROM-Grundbereich (H-Teil;Ebene/Anf/Ende--1)
+                0x4895              3 Byte  2.ROM-Bereich (H-Teil;Ebene/Anf/Ende--1)
+                0x4898              3 Byte  3.ROM-Bereich (H-Teil;Ebene/Anf/Ende--1)
+                0x489b              3 Byte  4.ROM-Bereich (H-Teil;Ebene/Anf/Ende--1)
+                0x489e              3 Byte  Reserve
+                0x48a1              1 Byte  0xff Ende PROM
+                0x48a2              3 Byte  Objekt-RAM (H-Teil;Ebene/Anf/Ende--1)
+                0x48a5              3 Byte  1.ISI (H-Teil;Ebene/Anf/Ende--1)
+                0x48a8              3 Byte  2.ISI (H-Teil;Ebene/Anf/Ende--1)
+                0x48ab              3 Byte  3.ISI (H-Teil;Ebene/Anf/Ende--1)
+                0x48ae              3 Byte  4.ISI (H-Teil;Ebene/Anf/Ende--1)
+                0x48b1              3 Byte  BSE-RAM (H-Teil;Ebene/Anf/Ende--1)
+                0x48b4              3 Byte  Reserve
+                0x48b7              1 Byte  0xff Ende RAM
+                0x48b8              1 Byte  Funktion 1.ISI
+                0x48b9              1 Byte  Funktion 2.ISI
+                0x48ba              1 Byte  Funktion 3.ISI
+                0x48bb              1 Byte  Funktion 4.ISI
+                0x48bc              1 Byte  AAE-Bedienung (00 - BSE / 01 - BSEAP / 02 - BSEAS)
+                0x48bd              1 Byte  Adresse KOMO
+                0x48be              1 Byte  0xff
+                0x48bf              1 Byte  Adresse PPE
+                
+                        Umspeicherbereich Objektdaten
+1 ECC0   <- Handschriftlich ergänzt 
+                0x48c0              2 Byte  Laenge > (0040) <- Handschriftlich ergänzt
+                0x48c2              2 Byte  Quelladresse   
+                0x48c4              2 Byte  Zieladresse
+                0x48c6              1 Byte  Quellebene
+                        Umspeicherbereich Bedienmodule
+                0x48c7              2 Byte  Laenge
+                0x48c9              2 Byte  Quelladresse
+                0x48cb              2 Byte  Zieladresse
+                0x48cd              1 Byte  Quellebene
+                0x48ce              16 Byte Reserve
+                0x48de              1 Byte  Restart Betriebsart der BSE
+                
+35              0x4900              254 * 2 Byte Adressen der KOMS
+
+30              0x4bbe              2 Byte  Projekt-Datum (CRC von 0x4800)          
+        ! Merkwürdige Reihenfolge , Überlappung , Warum ( Anmerkung Ronny) ?
+31              0x4bbc              52 Byte CRC-Tabelle ab EPROM 0x4400
+29              0x4c00              4 Byte "NAME" 1.SBM (Datenblock Organisationsteil 1.SBM)
+                                    3 Byte  "JMP 'START'" , Sprung zum VAP ( 1. -> 0x7002 )
+                                    1 Byte  m = Laenge Anfang MAB+2
+                                    1 Byte  n = Summe FECO,Eingang,Ausgang,Parameter
+                                    1 Byte  Rechenzeit 4Bit-Exponent, 4Bit-Mantisse in 2^ 8ms
+                                    n Byte  Strukturbyte Eingang,Ausgang,Parameter
+                                    1 Byte  Anfangsbelegung Fehlercode (FECO = 00)
+                                    m-3 Byte Anfangsbelegung Eingang,Ausgang,Parameter,Merker
+                                    
+                                Aufbau SBM 
+28 / Ebene 2 (0x02)
+                0x7000      2 Byte Laenge Verarbeitungsteil +2  1.SBM
+                0x7002      START : POP IY
+                                    LD (IY+0),0 ; FECO im MAB loeschen 
+                                        |
+                                    Programm in Assembler
+                                        |
+                                    LD L,(IY+m-3) ; HL mit Adresse Folge-MAB laden
+                                    LD H,(IY+m-2) ; ...
+                                    JMP 0x2481    ; Return zum System
+                                    
+                0x7XXX      2 Byte Laenge VAP naechstest SBM
+                                        usw.
