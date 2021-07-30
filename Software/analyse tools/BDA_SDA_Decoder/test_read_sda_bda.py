@@ -45,7 +45,6 @@ args = parser.parse_args()
 
 filename, file_extension = os.path.splitext(args.file)
 
-f = open(args.file, "rb")
 # check for correct fileextension and use the correct blocksize for padding if required 
 if file_extension.lower() in (".sda", ".bda", ".sds", ".bds"):
 #   This is a File from a system with floppy
@@ -61,7 +60,9 @@ elif file_extension.lower() == '.fex':
 else: 
 #   don´t like to process this ...
     exit("Whatever ... this is not a structure file ?!")
-    
+
+f = open(args.file, "rb")
+
 dst_addr = 0x0000
 start_addr = 0x0000
 end_adr = 0x0000
@@ -70,7 +71,7 @@ range_new = True
 range_len = 0
 range_num = -1
 memory_map = []
-datacrc = CRCCalc()
+datacrc = CRCCalc() #Init CRC-Generator
 while True: 
     datacrc.reset_crc()
     # ToDo: Das geht doch noch schicker mit der Anzahl der zu lesenden Bytes ?
