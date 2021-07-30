@@ -91,7 +91,7 @@ Listennummer    Adresse     Bytezahl und Bedeutung
                                     Byte 7 - Alarmzustandsprotokoll
                                     Byte 8 - 11 Reserve
                                     
-19              0xB2BA      8 Byte  Alarmfarben (Bit7 - Blinken)    Tabelle
+19              0xB2BA      8 Byte  Alarmfarben (Bit7 - Blinken)    TAB Tabelle
                                     Byte 0 - kein Alarm
                                     Byte 1 - 1.Stufe nicht quittiert
                                     Byte 2 - 2.Stufe nicht quittiert
@@ -133,10 +133,10 @@ Listennummer    Adresse     Bytezahl und Bedeutung
 23              0xB2EB      Speicherblockbeschreibung           SBORO                                
                                 (Objekt-ROM Bereich , Aufbau wie SBOZY)
 
-24              0xB304      202 Byte CRC-REste (Reihenfolge nach SBORO)
+24              0xB304      202 Byte CRC-REste (Reihenfolge nach SBORO) PSB0
                                     Byte 0,1 - CRC Rest EPROM 0xB000
                     
-25              0xB3CA      5 Byte  Anzahl Anlagenbilder pro Ebene
+25              0xB3CA      5 Byte  Anzahl Anlagenbilder pro Ebene BILD
 
                 Aufbau RAM-Listen Ebene7(0x02)
                 ------------------------------
