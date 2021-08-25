@@ -38,9 +38,56 @@ class CRCCalc:
         self.crcsum = self.start_val
         self.count = 0
                 
+def BSE_Listennummer(val):
+    BSE_Li = {
+        1:  "ECC",
+        22: "KESAT",
+        27: "KES Block",
+        28: "Sonderbasismodule",
+        29: "Organisationsteil Sonderbasismodule ?",
+        30: "Projekt Datum",
+        31: "CRC Tabelle EPROM 0x4800",
+        35: "Adressen KOMS",
+        42: "Datenblock der BSE",
+        49: "VERT",
+        50: "Adressbuch Prozessabbild",
+        51: "SOMO",        
+        }
+    return("{:2d} {:40s}".format(val,BSE_Li.get(val,'Unbekannt')))
+
+def PSR_Listennummer(val):
+    PSR_Li = {
+        1: "IMTA",
+        2: "PINL",
+        3: "ZUBS",
+        4: "ZUUG",
+        5: "MGBZ",
+        6: "UEBZ",
+        7: "PRODA",
+        8: "WRT4 WRT6 WRT8 WRT12",
+        9: "POMA",
+        10: "DIMT",
+        11: "TEXT",
+        12: "BLZA",
+        13: "ABOB",
+        14: "ZUFE",
+        15: "RESB",
+        16: "TPSRF",
+        17: "DVPER",
+        18: "GEZUW",
+        19: "TAB",
+        20: "TMASK",
+        21: "STSM",
+        22: "SBOZY",
+        23: "SBORO",
+        24: "PSB0",
+        25: "BILD"}
+    return("{:2d} {:40s}".format(val,PSR_Li.get(val,'Unbekannt')))
+        
 parser = argparse.ArgumentParser()
 parser.add_argument("file", help="Datei die gelesen werden soll")
 args = parser.parse_args()
+
 #f = open("/home/shinji/Nextcloud/Rechenwerk/Steuerungstechnik/Geräte und Reglerwerk Teltow/Audatec/Projekte/F60/Strukturdaten/DISK___8.830/X2021480.BDA","rb")
 
 filename, file_extension = os.path.splitext(args.file)
@@ -83,6 +130,9 @@ while True:
     if not blk_len:
     # EOF
         break
+    if blk_len == 0 :
+        print("Nullblock")
+    #dst_fe == 0xff -> kein Datenblock
     if ((blk_len < 7) and (dst_fe == 0xff)):
         print("Warning blocklegth {:d}!".format(blk_len))
         blk_len = 7
@@ -124,12 +174,17 @@ while True:
     #                   range_num=range_num))
     #     range_new = False
     if dst_fe == 0xFF:
-        
         print("{:03d} (0x{:02X})-> ".format(block_nummer,block_nummer), end='')
+        if(data[0] == 0x00 ):
+            print("Datum: {:02d}.{:02d}.{:02d}".format(data[1],data[2],data[3]))
+        elif(data[0] == 0x01 ):
+            print("RAM ",end='')
+        elif(data[0] == 0x02 ):
+            print("ROM ",end='')
         try:
-            print("0x{:02X} 0x{:02X} 0x{:02X} 0x{:02X} ".format(data[0],data[1],data[2],data[3]),end='')
-            print("0x{:04X} ".format((data[4]+data[5]*256)),end='')
-            print("{:5d} ".format((data[6]+data[7]*256)),end='')
+            print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
+            print("Start-Adr: 0x{:04X} ".format((data[4]+data[5]*256)),end='')
+            print("Länge (?){:5d} ".format((data[6]+data[7]*256)),end='')
             print("0x{:02X} 0x{:02X} 0x{:02X} 0x{:02X} ".format(data[8],data[9],data[10],data[11]),end='')
         except:
             pass
