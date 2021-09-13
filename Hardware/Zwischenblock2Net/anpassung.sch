@@ -1,0 +1,292 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 2 2
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:R R?
+U 1 1 614022C9
+P 3050 2850
+F 0 "R?" V 3257 2850 50  0000 C CNN
+F 1 "681R" V 3166 2850 50  0000 C CNN
+F 2 "" V 2980 2850 50  0001 C CNN
+F 3 "~" H 3050 2850 50  0001 C CNN
+	1    3050 2850
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 61402F74
+P 4150 3450
+F 0 "R?" V 4357 3450 50  0000 C CNN
+F 1 "4,02k" V 4266 3450 50  0000 C CNN
+F 2 "" V 4080 3450 50  0001 C CNN
+F 3 "~" H 4150 3450 50  0001 C CNN
+	1    4150 3450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 6140312F
+P 3650 2550
+F 0 "R?" H 3720 2596 50  0000 L CNN
+F 1 "9,09k" H 3720 2505 50  0000 L CNN
+F 2 "" V 3580 2550 50  0001 C CNN
+F 3 "~" H 3650 2550 50  0001 C CNN
+	1    3650 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 61403500
+P 3300 2550
+F 0 "R?" H 3370 2596 50  0000 L CNN
+F 1 "402R" H 3370 2505 50  0000 L CNN
+F 2 "" V 3230 2550 50  0001 C CNN
+F 3 "~" H 3300 2550 50  0001 C CNN
+	1    3300 2550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 61403930
+P 3800 3450
+F 0 "R?" V 4007 3450 50  0000 C CNN
+F 1 "4,02k" V 3916 3450 50  0000 C CNN
+F 2 "" V 3730 3450 50  0001 C CNN
+F 3 "~" H 3800 3450 50  0001 C CNN
+	1    3800 3450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 61403DAA
+P 4400 3700
+F 0 "R?" H 4470 3746 50  0000 L CNN
+F 1 "4,87k" H 4470 3655 50  0000 L CNN
+F 2 "" V 4330 3700 50  0001 C CNN
+F 3 "~" H 4400 3700 50  0001 C CNN
+	1    4400 3700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 61404426
+P 5150 2800
+F 0 "R?" V 4943 2800 50  0000 C CNN
+F 1 "46,3k" V 5034 2800 50  0000 C CNN
+F 2 "" V 5080 2800 50  0001 C CNN
+F 3 "~" H 5150 2800 50  0001 C CNN
+	1    5150 2800
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 614046DE
+P 3050 3150
+F 0 "C?" V 3302 3150 50  0000 C CNN
+F 1 "100pF" V 3211 3150 50  0000 C CNN
+F 2 "" H 3088 3000 50  0001 C CNN
+F 3 "~" H 3050 3150 50  0001 C CNN
+	1    3050 3150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 61404BE1
+P 4150 3150
+F 0 "C?" V 4402 3150 50  0000 C CNN
+F 1 "47pF" V 4311 3150 50  0000 C CNN
+F 2 "" H 4188 3000 50  0001 C CNN
+F 3 "~" H 4150 3150 50  0001 C CNN
+	1    4150 3150
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Diode:BAT46 D?
+U 1 1 61405037
+P 5150 3150
+F 0 "D?" H 5150 3367 50  0000 C CNN
+F 1 "BAT46" H 5150 3276 50  0000 C CNN
+F 2 "Diode_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 5150 2975 50  0001 C CNN
+F 3 "http://www.vishay.com/docs/85662/bat46.pdf" H 5150 3150 50  0001 C CNN
+	1    5150 3150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2900 3150 2900 3000
+Wire Wire Line
+	3200 3150 3200 3000
+Wire Wire Line
+	4000 3450 4000 3150
+Wire Wire Line
+	4300 3450 4300 3150
+Wire Wire Line
+	3350 3000 3300 3000
+Connection ~ 3200 3000
+Wire Wire Line
+	3200 3000 3200 2850
+$Comp
+L Transistor_BJT:BC327 Q?
+U 1 1 61400EB7
+P 3550 3000
+F 0 "Q?" H 3741 2954 50  0000 L CNN
+F 1 "SF816D" H 3741 3045 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 3750 2925 50  0001 L CIN
+F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/bc337.pdf" H 3550 3000 50  0001 L CNN
+	1    3550 3000
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	3650 2700 3650 2800
+Wire Wire Line
+	3300 2700 3300 3000
+Connection ~ 3300 3000
+Wire Wire Line
+	3300 3000 3200 3000
+Wire Wire Line
+	3950 3450 4000 3450
+Connection ~ 4000 3450
+Wire Wire Line
+	4300 3450 4400 3450
+Connection ~ 4300 3450
+$Comp
+L Transistor_BJT:BC337 Q?
+U 1 1 61416722
+P 4800 3450
+F 0 "Q?" H 4990 3496 50  0000 L CNN
+F 1 "SS218" H 4990 3405 50  0000 L CNN
+F 2 "Package_TO_SOT_THT:TO-92_Inline" H 5000 3375 50  0001 L CIN
+F 3 "https://diotec.com/tl_files/diotec/files/pdf/datasheets/bc337.pdf" H 4800 3450 50  0001 L CNN
+	1    4800 3450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4600 3450 4400 3450
+Connection ~ 4400 3450
+Wire Wire Line
+	4900 3250 4900 3150
+Wire Wire Line
+	4900 3150 5000 3150
+$Comp
+L power:GND #PWR?
+U 1 1 6141A09F
+P 4900 3950
+F 0 "#PWR?" H 4900 3700 50  0001 C CNN
+F 1 "GND" H 4905 3777 50  0000 C CNN
+F 2 "" H 4900 3950 50  0001 C CNN
+F 3 "" H 4900 3950 50  0001 C CNN
+	1    4900 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 6141A8D8
+P 4400 3950
+F 0 "#PWR?" H 4400 3700 50  0001 C CNN
+F 1 "GND" H 4405 3777 50  0000 C CNN
+F 2 "" H 4400 3950 50  0001 C CNN
+F 3 "" H 4400 3950 50  0001 C CNN
+	1    4400 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5P #PWR?
+U 1 1 6141B012
+P 3650 2250
+F 0 "#PWR?" H 3650 2100 50  0001 C CNN
+F 1 "+5P" H 3665 2423 50  0000 C CNN
+F 2 "" H 3650 2250 50  0001 C CNN
+F 3 "" H 3650 2250 50  0001 C CNN
+	1    3650 2250
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5P #PWR?
+U 1 1 6141BFA3
+P 3300 2250
+F 0 "#PWR?" H 3300 2100 50  0001 C CNN
+F 1 "+5P" H 3315 2423 50  0000 C CNN
+F 2 "" H 3300 2250 50  0001 C CNN
+F 3 "" H 3300 2250 50  0001 C CNN
+	1    3300 2250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3650 2400 3650 2250
+Wire Wire Line
+	3300 2400 3300 2250
+$Comp
+L 74xx_IEEE:7400 U?
+U 1 1 614227B0
+P 6100 3250
+F 0 "U?" H 6100 3716 50  0000 C CNN
+F 1 "7400" H 6100 3625 50  0000 C CNN
+F 2 "" H 6100 3250 50  0001 C CNN
+F 3 "" H 6100 3250 50  0001 C CNN
+	1    6100 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5300 3150 5600 3150
+$Comp
+L 74xx_IEEE:7400 U?
+U 2 1 61425725
+P 2200 3000
+F 0 "U?" H 2200 3466 50  0000 C CNN
+F 1 "7400" H 2200 3375 50  0000 C CNN
+F 2 "" H 2200 3000 50  0001 C CNN
+F 3 "" H 2200 3000 50  0001 C CNN
+	2    2200 3000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2700 3000 2900 3000
+Connection ~ 2900 3000
+Wire Wire Line
+	2900 3000 2900 2850
+Wire Wire Line
+	4400 2800 5000 2800
+Wire Wire Line
+	4400 2800 4400 3450
+Wire Wire Line
+	5300 2800 6600 2800
+Wire Wire Line
+	6600 2800 6600 3250
+Wire Wire Line
+	3650 3200 3650 3450
+Wire Wire Line
+	4400 3450 4400 3550
+Wire Wire Line
+	4900 3650 4900 3950
+Wire Wire Line
+	4400 3850 4400 3950
+Text HLabel 1000 3450 0    50   BiDi ~ 0
+ZI-Takt
+Wire Wire Line
+	3650 3450 1000 3450
+Connection ~ 3650 3450
+Text GLabel 7000 3250 2    50   Output ~ 0
+RX-Takt
+Wire Wire Line
+	6600 3250 7000 3250
+Connection ~ 6600 3250
+Text HLabel 1000 2900 0    50   Input ~ 0
+TX-TAKT
+Wire Wire Line
+	1000 2900 1700 2900
+Text HLabel 950  3100 0    50   Input ~ 0
+RTS
+Wire Wire Line
+	1700 3100 950  3100
+$EndSCHEMATC
