@@ -110,6 +110,7 @@ else:
 
 f = open(args.file, "rb")
 
+fe_order = []
 dst_addr = 0x0000
 start_addr = 0x0000
 end_adr = 0x0000
@@ -137,12 +138,41 @@ while True:
         print("Warning blocklegth {:d}!".format(blk_len))
         blk_len = 7
     data = bytes(f.read(blk_len))
+    if dst_fe == 0xFF:
+        print("{:03d} (0x{:02X})-> ".format(block_nummer,block_nummer), end='')
+        if(data[0] == 0x00 ):
+            print("Datum: {:02d}.{:02d}.{:02d}".format(data[1],data[2],data[3]))
+        elif(data[0] == 0x01 ):
+            print("RAM ",end='')
+        elif(data[0] == 0x02 ):
+            print("ROM ",end='')
+        else:
+            print(f"Anderer Typ {data[0]} ?")
+        try:
+            print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
+            print("Start-Adr: 0x{:04X} ".format((data[4]+data[5]*256)),end='')
+            print("Länge (?){:5d} ".format((data[6]+data[7]*256)),end='')
+            print("0x{:02X} 0x{:02X} 0x{:02X} 0x{:02X} ".format(data[8],data[9],data[10],data[11]),end='')
+        except:
+            pass
+        #for dat in data:
+        #    print("0x{:02X} ".format(dat), end='')
+            #print("{:c} ".format(dat), end='')
+        range_new = True
+        range_num += 1
+        print("<-")
+    fe_order.append({'dst_fe':dst_fe,'blk_len':blk_len,'dst_addr':dst_addr,'range':range_num})
+    #     print("-) ", end='')
+    #     for dat in rest:
+    #         #print("0x{:02X} ".format(dat), end='')
+    #         print("{:c} ".format(dat), end='')
+    #     print("(-")
     if(end_adr+1 != dst_addr):
         memory_map.append({})
         start_addr = dst_addr
         range_new = True
-        range_num += 1
-        range_len = blk_len
+#        range_num += 1
+#        range_len = blk_len
         memory_map[range_num]['start_adr'] = start_addr
         memory_map[range_num]['start_block'] = block_nummer
         memory_map[range_num]['FE'] = dst_fe
@@ -173,31 +203,6 @@ while True:
     #                   rlen=range_len,
     #                   range_num=range_num))
     #     range_new = False
-    if dst_fe == 0xFF:
-        print("{:03d} (0x{:02X})-> ".format(block_nummer,block_nummer), end='')
-        if(data[0] == 0x00 ):
-            print("Datum: {:02d}.{:02d}.{:02d}".format(data[1],data[2],data[3]))
-        elif(data[0] == 0x01 ):
-            print("RAM ",end='')
-        elif(data[0] == 0x02 ):
-            print("ROM ",end='')
-        try:
-            print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
-            print("Start-Adr: 0x{:04X} ".format((data[4]+data[5]*256)),end='')
-            print("Länge (?){:5d} ".format((data[6]+data[7]*256)),end='')
-            print("0x{:02X} 0x{:02X} 0x{:02X} 0x{:02X} ".format(data[8],data[9],data[10],data[11]),end='')
-        except:
-            pass
-        #for dat in data:
-        #    print("0x{:02X} ".format(dat), end='')
-            #print("{:c} ".format(dat), end='')
-        print("<-")
-        
-    #     print("-) ", end='')
-    #     for dat in rest:
-    #         #print("0x{:02X} ".format(dat), end='')
-    #         print("{:c} ".format(dat), end='')
-    #     print("(-")
     block_nummer += 1
 print("Fertig")
 for x in memory_map:
