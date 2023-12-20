@@ -83,6 +83,15 @@ def PSR_Listennummer(val):
         24: "PSB0",
         25: "BILD"}
     return("{:2d} {:40s}".format(val,PSR_Li.get(val,'Unbekannt')))
+
+def FileTypes(val):
+    FT_Li = {
+        '.sda': "Strukturdaten",
+        '.bda': "Backup Strukturdaten",
+        '.sds': "Strukturdaten ?",
+        '.bds': "Backup Strukturdaten ?",
+        '.stz': "Zeichensatz"}
+    return(f"{val} {FT_Li.get(val,'Unbekannt')}")
         
 parser = argparse.ArgumentParser()
 parser.add_argument("file", help="Datei die gelesen werden soll")
@@ -93,9 +102,9 @@ args = parser.parse_args()
 filename, file_extension = os.path.splitext(args.file)
 
 # check for correct fileextension and use the correct blocksize for padding if required 
-if file_extension.lower() in (".sda", ".bda", ".sds", ".bds"):
+if file_extension.lower() in (".sda", ".bda", ".sds", ".bds", ".stz", ".ssd" ):
 #   This is a File from a system with floppy
-    print("File from Disk")
+    print(f"File from Disk : {FileTypes(file_extension.lower())}")
     media = 'disk'
     block_size = 124
 elif file_extension.lower() == '.fex':
@@ -108,6 +117,13 @@ else:
 #   don´t like to process this ...
     exit("Whatever ... this is not a structure file ?!")
 
+
+zfe = os.path.basename(filename)[6]
+if(zfe == '8'):
+    print("BSE")
+elif(zfe == '2'):
+    print("PSR")
+    
 f = open(args.file, "rb")
 
 fe_order = []
@@ -151,15 +167,15 @@ while True:
         try:
             print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
             print("Start-Adr: 0x{:04X} ".format((data[4]+data[5]*256)),end='')
-            print("Länge (?){:5d} ".format((data[6]+data[7]*256)),end='')
+            print("Länge (?){:5d} 0x{:02X} ".format((data[6]+data[7]*256),(data[6]+data[7]*256)),end='')
             print("0x{:02X} 0x{:02X} 0x{:02X} 0x{:02X} ".format(data[8],data[9],data[10],data[11]),end='')
         except:
             pass
         #for dat in data:
         #    print("0x{:02X} ".format(dat), end='')
             #print("{:c} ".format(dat), end='')
-        range_new = True
-        range_num += 1
+        #range_new = True
+        #range_num += 1
         print("<-")
     fe_order.append({'dst_fe':dst_fe,'blk_len':blk_len,'dst_addr':dst_addr,'range':range_num})
     #     print("-) ", end='')
@@ -171,8 +187,8 @@ while True:
         memory_map.append({})
         start_addr = dst_addr
         range_new = True
-#        range_num += 1
-#        range_len = blk_len
+        range_num += 1
+        range_len = blk_len
         memory_map[range_num]['start_adr'] = start_addr
         memory_map[range_num]['start_block'] = block_nummer
         memory_map[range_num]['FE'] = dst_fe
@@ -195,7 +211,7 @@ while True:
     # if range_new | True:
     #     print('BLK: {range_num:3d} / {blk:3d} Len: {cnt:3d} / {rlen:5d} Addr: 0x{addr:04X} - 0x{addr_e:04X} Station: 0x{station:02X} 0x{st_addr:04X}'
     #           .format(blk=block_nummer,
-    #                   cnt=blk_len,
+    #                   cnt=blk_len,dst_addrdst_addrdst_addr
     #                   addr=dst_addr,
     #                   addr_e=end_adr,
     #                   station=dst_fe,
