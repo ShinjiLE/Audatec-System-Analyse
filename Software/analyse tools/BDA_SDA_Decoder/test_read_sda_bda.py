@@ -69,7 +69,7 @@ def PSR_Listennummer(val):
         10: "DIMT",
         11: "TEXT",
         12: "BLZA",
-        13: "ABOB",
+        13: "AB08",
         14: "ZUFE",
         15: "RESB",
         16: "TPSRF",
@@ -165,7 +165,11 @@ while True:
         else:
             print(f"Anderer Typ {data[0]} ?")
         try:
-            print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
+            if(zfe == '8'):
+                print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],BSE_Listennummer(data[1]),data[2],data[3]),end='')
+            elif(zfe == '2'):
+                print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
+            #print("Target: {:d} Liste: {:s} Ebene: {:08b} 0x{:02X} ".format(data[0],PSR_Listennummer(data[1]),data[2],data[3]),end='')
             print("Start-Adr: 0x{:04X} ".format((data[4]+data[5]*256)),end='')
             print("Länge (?){:5d} 0x{:02X} ".format((data[6]+data[7]*256),(data[6]+data[7]*256)),end='')
             print("0x{:02X} 0x{:02X} 0x{:02X} 0x{:02X} ".format(data[8],data[9],data[10],data[11]),end='')
